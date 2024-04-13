@@ -80,7 +80,7 @@ public class PickupController : MonoBehaviour
             throwHeldObj = false;
             Rigidbody objectToThrow = objectHolding.GetComponent<Rigidbody>();
             objectToThrow.useGravity = true;
-            objectToThrow.AddForce(dirToThrow * throwForce, ForceMode.Impulse);
+            objectToThrow.AddForce(dirToThrow * throwForce * objectToThrow.mass, ForceMode.Impulse);
             objectHolding.SetPickedUp(false);
             objectHolding = null;
         }

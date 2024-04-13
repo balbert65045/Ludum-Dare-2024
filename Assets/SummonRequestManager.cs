@@ -7,6 +7,7 @@ public class SummonRequestManager : MonoBehaviour
 {
     [SerializeField] SummoningZone LinkedSummoningZone;
     [SerializeField] GameObject SummoningRequestPrefab;
+
     [SerializeField] TMP_Text ValueEarnedText;
     [SerializeField] float startDelay = 2f;
     float timeSinceLastSummon;
@@ -37,7 +38,7 @@ public class SummonRequestManager : MonoBehaviour
         }
         GameObject request = Instantiate(SummoningRequestPrefab, this.transform);
         myCurrentRequest = request.GetComponent<SummonRequest>();
-        myCurrentRequest.SetRequestType(requestTypes);
+        myCurrentRequest.SetRequestType(requestTypes, LinkedSummoningZone.circle);
         request.transform.localPosition = Vector3.zero;
     }
 

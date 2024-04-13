@@ -78,4 +78,12 @@ public class MoveableCreature : MonoBehaviour
             rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.GetComponent<Wall>() != null)
+        {
+            moveDirection = -moveDirection;
+        }
+    }
 }

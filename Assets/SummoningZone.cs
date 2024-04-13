@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SummoningZone : MonoBehaviour
 {
+    public SpriteRenderer circle;
     public List<PickUpableObj> objsInCircle = new List<PickUpableObj>();
     [SerializeField] GameObject[] Spots;
     private void OnTriggerStay(Collider other)
