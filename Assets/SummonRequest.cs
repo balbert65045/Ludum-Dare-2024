@@ -4,8 +4,7 @@ using UnityEngine;
 
 public enum RequestTypes
 {
-    Cube,
-
+    Creature1,
 }
 
 public class SummonRequest : MonoBehaviour

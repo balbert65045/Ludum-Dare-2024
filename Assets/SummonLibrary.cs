@@ -19,7 +19,7 @@ public class SummonLibrary : MonoBehaviour
     {
         switch(type)
         {
-            case RequestTypes.Cube:
+            case RequestTypes.Creature1:
                  return CubePrefab;
         }
         return null;

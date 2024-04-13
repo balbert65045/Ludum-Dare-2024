@@ -16,6 +16,7 @@ public class SummoningZone : MonoBehaviour
             other.transform.GetComponent<PickUpableObj>().GetComponent<Rigidbody>().velocity = Vector3.zero;
             other.transform.GetComponent<PickUpableObj>().GetComponent<Rigidbody>().AddTorque(Vector3.right);
             other.transform.GetComponent<PickUpableObj>().zoneIn = this;
+            other.transform.GetComponent<MoveableCreature>().SetCapableOfMoving(false);
         }
     }
 

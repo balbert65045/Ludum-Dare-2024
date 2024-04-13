@@ -37,7 +37,9 @@ public class PickupController : MonoBehaviour
                 {
                     objectHolding = objsCapableOfPickingUp[0];
                     objectHolding.GetComponent<Rigidbody>().useGravity = false;
+                    objectHolding.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                     objectHolding.SetPickedUp(true);
+                    objectHolding.GetComponent<MoveableCreature>().SetCapableOfMoving(false);
                     objsCapableOfPickingUp.Remove(objectHolding);
                     if (objectHolding.zoneIn)
                     {

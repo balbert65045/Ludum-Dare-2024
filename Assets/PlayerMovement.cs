@@ -17,9 +17,12 @@ public class PlayerMovement : MonoBehaviour
     bool isDashing = false;
     float timeOfDash;
 
+    Animator animator;
+
     void Start()
     {
-        rb = GetComponent<Rigidbody>(); 
+        rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -33,6 +36,12 @@ public class PlayerMovement : MonoBehaviour
         {
             Quaternion toRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, 360 * Time.deltaTime);
+            animator.SetBool("IsMoving", true);
+
+        }
+        else
+        {
+            animator.SetBool("IsMoving", false);
         }
         if (Input.GetKeyDown(KeyCode.LeftShift) && dashAvailable && !isDashing)
         {
@@ -60,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
                 dashCoolingDown = true;
             }
         }
+        animator.speed = speed * .1f;
         rb.MovePosition(rb.position + moveDirection * speed * Time.fixedDeltaTime);
     }
 }
