@@ -25,6 +25,16 @@ public class SummoningZone : MonoBehaviour
         objsInCircle.Remove(Obj);
     }
 
+    public void SummonObjs()
+    {
+        PickUpableObj[] Objs = objsInCircle.ToArray();
+        foreach(PickUpableObj Obj in Objs) { 
+            RemoveObj(Obj);
+            Destroy(Obj.gameObject);
+        }
+
+    }
+
     private void FixedUpdate()
     {
         for(int i = 0; i < objsInCircle.Count; i++)

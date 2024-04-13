@@ -10,12 +10,14 @@ public class PickupController : MonoBehaviour
     bool PreparingToThrow = false;
     float timeOfPreparitionOfThrow;
 
-    [SerializeField] float MaxChargeThrowTime = 2f;
+    [SerializeField] float MaxChargeDistance = 1200f;
     [SerializeField] float MaxThrowForce = 10f;
 
     bool throwHeldObj = false;
     float throwForce;
 
+    Vector3 mousPosDown;
+    Vector3 dirToThrow;
 
     List<PickUpableObj> objsCapableOfPickingUp = new List<PickUpableObj>();
     PickUpableObj objectHolding;
@@ -27,7 +29,7 @@ public class PickupController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E)){
+        if (Input.GetMouseButtonDown(0)){
             //PickUp
             if (objectHolding == null)
             {
@@ -47,16 +49,19 @@ public class PickupController : MonoBehaviour
             //Throw
             else
             {
+                mousPosDown = Input.mousePosition;
                 PreparingToThrow = true;
                 timeOfPreparitionOfThrow = Time.time;
             }
         }
 
-        if (PreparingToThrow && Input.GetKeyUp(KeyCode.E))
+        if (PreparingToThrow && (Input.GetMouseButtonUp(0)))
         {
+            Vector3 differenceInMousePos = mousPosDown - Input.mousePosition;
+            dirToThrow = new Vector3(-differenceInMousePos.x, 0, -differenceInMousePos.y).normalized;
             PreparingToThrow = false;
             throwHeldObj = true;
-            throwForce = (Mathf.Clamp(Time.time - timeOfPreparitionOfThrow, 0, MaxChargeThrowTime) / MaxChargeThrowTime) * MaxThrowForce;
+            throwForce = (Mathf.Clamp(differenceInMousePos.magnitude, 0, MaxChargeDistance) / MaxChargeDistance) * MaxThrowForce;
         }
 
     }
@@ -73,7 +78,7 @@ public class PickupController : MonoBehaviour
             throwHeldObj = false;
             Rigidbody objectToThrow = objectHolding.GetComponent<Rigidbody>();
             objectToThrow.useGravity = true;
-            objectToThrow.AddForce(transform.forward * throwForce, ForceMode.Impulse);
+            objectToThrow.AddForce(dirToThrow * throwForce, ForceMode.Impulse);
             objectHolding.SetPickedUp(false);
             objectHolding = null;
         }
