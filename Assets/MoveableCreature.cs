@@ -64,7 +64,6 @@ public class MoveableCreature : MonoBehaviour
         {
             if(rb.velocity.magnitude < 1f)
             {
-                Debug.Log("GetBack up");
                 rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
                 SetCapableOfMoving(true);
             }

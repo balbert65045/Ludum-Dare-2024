@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,12 +8,16 @@ public class SummoningZone : MonoBehaviour
     public SpriteRenderer circle;
     public List<PickUpableObj> objsInCircle = new List<PickUpableObj>();
     [SerializeField] GameObject[] Spots;
+
+    public Action OnChangedInsidePortal;
     private void OnTriggerStay(Collider other)
     {
         if (other.transform.GetComponent<PickUpableObj>() != null && !other.transform.GetComponent<PickUpableObj>().isPickedUp && other.transform.GetComponent<PickUpableObj>().zoneIn == null)
         {
             if (objsInCircle.Count >= Spots.Length) { return; }
+            if (objsInCircle.Contains(other.transform.GetComponent<PickUpableObj>())) { return; }
             objsInCircle.Add(other.transform.GetComponent<PickUpableObj>());
+            if (OnChangedInsidePortal != null) { OnChangedInsidePortal(); }
             other.transform.GetComponent<PickUpableObj>().GetComponent<Rigidbody>().useGravity = false;
             other.transform.GetComponent<PickUpableObj>().GetComponent<Rigidbody>().velocity = Vector3.zero;
             other.transform.GetComponent<PickUpableObj>().GetComponent<Rigidbody>().AddTorque(Vector3.right);
@@ -25,16 +30,18 @@ public class SummoningZone : MonoBehaviour
     {
         Obj.zoneIn = null;
         objsInCircle.Remove(Obj);
+        if (OnChangedInsidePortal != null) { OnChangedInsidePortal(); }
     }
 
     public void SummonObjs()
     {
         PickUpableObj[] Objs = objsInCircle.ToArray();
+        FindObjectOfType<PickupController>().RemoveFromCapablePickups(Objs);
         foreach(PickUpableObj Obj in Objs) { 
             RemoveObj(Obj);
             Destroy(Obj.gameObject);
         }
-
+        if (OnChangedInsidePortal != null) { OnChangedInsidePortal(); }
     }
 
     private void FixedUpdate()

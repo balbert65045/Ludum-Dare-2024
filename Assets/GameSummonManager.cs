@@ -35,4 +35,9 @@ public class GameSummonManager : MonoBehaviour
             return request.types;
         }
     }
+
+    public GameObject GetRandomSpawn()
+    {
+        return SpawnLocations [UnityEngine.Random.Range(0, SpawnLocations.Count)];
+    }
 }

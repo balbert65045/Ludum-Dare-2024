@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class SummonRequestManager : MonoBehaviour
 {
@@ -14,11 +17,73 @@ public class SummonRequestManager : MonoBehaviour
     SummonRequest myCurrentRequest;
 
     bool finished = false;
+    [SerializeField] Image Icon;
+    [SerializeField] GameObject Single;
+    [SerializeField] GameObject Double;
+    [SerializeField] GameObject Triple;
+    [SerializeField] GameObject Four;
+
+    [SerializeField] Image Arrow;
     // Start is called before the first frame update
     void Start()
     {
+        Arrow.gameObject.SetActive(false);
         timeSinceLastSummon = Time.time;
-        //RequestSummons();
+        Icon.sprite = LinkedSummoningZone.circle.sprite;
+        Icon.color = LinkedSummoningZone.circle.color;
+        LinkedSummoningZone.OnChangedInsidePortal = SumminingZone_OnChangedInsidePortal;
+    }
+
+    void SumminingZone_OnChangedInsidePortal()
+    {
+        Single.gameObject.SetActive(false);
+        Double.gameObject.SetActive(false);
+        Triple.gameObject.SetActive(false);
+        Four.gameObject.SetActive(false);
+        if (LinkedSummoningZone.objsInCircle.Count == 1)
+        {
+            Single.gameObject.SetActive(true);
+            Image[] images = Single.GetComponentsInChildren<Image>();
+            for (int i = 0; i < images.Length; i++)
+            {
+                images[i].sprite = FindObjectOfType<SummonLibrary>().findSprite(LinkedSummoningZone.objsInCircle[i].myRequestType);
+            }
+        }
+        else if (LinkedSummoningZone.objsInCircle.Count == 2)
+        {
+            Double.gameObject.SetActive(true);
+            Image[] images = Double.GetComponentsInChildren<Image>();
+            for (int i = 0; i < images.Length; i++)
+            {
+                images[i].sprite = FindObjectOfType<SummonLibrary>().findSprite(LinkedSummoningZone.objsInCircle[i].myRequestType);
+            }
+        }
+        else if (LinkedSummoningZone.objsInCircle.Count == 3)
+        {
+            Triple.gameObject.SetActive(true);
+            Image[] images = Triple.GetComponentsInChildren<Image>();
+            for (int i = 0; i < images.Length; i++)
+            {
+                images[i].sprite = FindObjectOfType<SummonLibrary>().findSprite(LinkedSummoningZone.objsInCircle[i].myRequestType);
+            }
+        }
+        else if (LinkedSummoningZone.objsInCircle.Count == 4)
+        {
+            Four.gameObject.SetActive(true);
+            Image[] images = Four.GetComponentsInChildren<Image>();
+            for (int i = 0; i < images.Length; i++)
+            {
+                images[i].sprite = FindObjectOfType<SummonLibrary>().findSprite(LinkedSummoningZone.objsInCircle[i].myRequestType);
+            }
+        }
+        if (CheckIfRequestWorks(myCurrentRequest.myRequestTypes, LinkedSummoningZone.objsInCircle))
+        {
+            Arrow.color = Color.green;
+        }
+        else
+        {
+            Arrow.color = Color.red;
+        }
     }
 
     private void Update()
@@ -28,8 +93,11 @@ public class SummonRequestManager : MonoBehaviour
         }
     }
 
+    
+
     public void RequestSummons()
     {
+        Arrow.gameObject.SetActive(true);
         RequestTypes[] requestTypes = FindObjectOfType<GameSummonManager>().AskForNextRequest();
         if (requestTypes.Length == 0)
         {
@@ -38,8 +106,16 @@ public class SummonRequestManager : MonoBehaviour
         }
         GameObject request = Instantiate(SummoningRequestPrefab, this.transform);
         myCurrentRequest = request.GetComponent<SummonRequest>();
-        myCurrentRequest.SetRequestType(requestTypes, LinkedSummoningZone.circle);
+        myCurrentRequest.SetRequestType(requestTypes);
         request.transform.localPosition = Vector3.zero;
+        if (CheckIfRequestWorks(myCurrentRequest.myRequestTypes, LinkedSummoningZone.objsInCircle))
+        {
+            Arrow.color = Color.green;
+        }
+        else
+        {
+            Arrow.color = Color.red;
+        }
     }
 
     public void TriggerSummoning()
@@ -65,13 +141,14 @@ public class SummonRequestManager : MonoBehaviour
             Debug.Log("Summon Fails");
         }
         LinkedSummoningZone.SummonObjs();
+        Destroy(myCurrentRequest.gameObject);
+        Arrow.gameObject.SetActive(false);
         StartCoroutine("WaitThenHideText");
     }
 
     IEnumerator WaitThenHideText()
     {
         yield return new WaitForSeconds(1);
-        Destroy(myCurrentRequest.gameObject);
         ValueEarnedText.gameObject.SetActive(false);
     }
 
@@ -79,25 +156,31 @@ public class SummonRequestManager : MonoBehaviour
     bool CheckIfRequestWorks(List<RequestTypes> requestTypes, List<PickUpableObj> objects)
     {
         List<RequestTypes> remainingRequests = new List<RequestTypes>();
-        List<PickUpableObj> remainingObjs = new List<PickUpableObj>();
+        List<RequestTypes> remainingObjsRequests = new List<RequestTypes>();
         foreach(RequestTypes requestType in requestTypes) { remainingRequests.Add(requestType); }
-        foreach(PickUpableObj pickUpableObj in objects) { remainingObjs.Add(pickUpableObj); }
+        foreach(PickUpableObj pickUpableObj in objects) { remainingObjsRequests.Add(pickUpableObj.myRequestType); }
 
         for(int i = 0; i < requestTypes.Count; i++)
         {
+            if (remainingObjsRequests.Contains(requestTypes[i])){ 
+                remainingObjsRequests.Remove(requestTypes[i]);
+                remainingRequests.Remove(requestTypes[i]);
+            }
+            /*
             for(int y = 0; y < objects.Count; y++) 
             {
                 if (requestTypes[i] == objects[y].myRequestType)
                 {
-                    if (remainingRequests.Count > 0 && remainingObjs.Count > 0)
+                    if (remainingRequests.Count > i && remainingObjs.Count > y)
                     {
                         remainingRequests.Remove(requestTypes[i]);
                         remainingObjs.Remove(remainingObjs[y]);
                     }
                 }
             }
+            */
         }
 
-        return remainingRequests.Count == 0 && remainingObjs.Count == 0;
+        return remainingRequests.Count == 0 && remainingObjsRequests.Count == 0;
     }
 }
