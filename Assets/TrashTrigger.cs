@@ -1,18 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class TrashTrigger : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] int pointsForTrash = 1;
+    [SerializeField] TMP_Text pointsText;
+    PickUpableObj lastObjectThrough;
+
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.GetComponent<PickUpableObj>() != null && other.GetComponent<PickUpableObj>() != lastObjectThrough)
+        {
+            FindObjectOfType<Score>().AdjustScore(pointsForTrash);
+            StartCoroutine("ShowPoints");
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator ShowPoints()
     {
-        
+        pointsText.gameObject.SetActive(true);
+        pointsText.text = "+" + pointsForTrash.ToString();
+        yield return new WaitForSeconds(1);
+        pointsText.gameObject.SetActive(false);
     }
 }

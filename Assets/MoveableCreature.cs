@@ -16,6 +16,8 @@ public class MoveableCreature : MonoBehaviour
     private PickUpableObj pickUpableObj;
     Animator animator;
 
+    float DelayToMoveFromStart = 3f;
+    float timeToBeAbleToCheck;
     public bool CapableOfMoving = true;
     public void SetCapableOfMoving(bool value) { 
         CapableOfMoving=value;
@@ -29,6 +31,9 @@ public class MoveableCreature : MonoBehaviour
         pickUpableObj = GetComponent<PickUpableObj>();
         DiscoverNextMovePos();
         StartCoroutine("ConsiderNewDirection");
+        rb.constraints = RigidbodyConstraints.None;
+        SetCapableOfMoving(false);
+        timeToBeAbleToCheck = Time.time + DelayToMoveFromStart;
     }
 
     IEnumerator ConsiderNewDirection()
@@ -51,6 +56,7 @@ public class MoveableCreature : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Time.time < timeToBeAbleToCheck) { return; }
         if (CapableOfMoving && !pickUpableObj.isPickedUp && pickUpableObj.zoneIn == null)
         {
             if (moveDirection != Vector3.zero)
@@ -74,7 +80,9 @@ public class MoveableCreature : MonoBehaviour
     {
         if (CapableOfMoving && !pickUpableObj.isPickedUp && pickUpableObj.zoneIn == null)
         {
-            rb.MovePosition(rb.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
+            //rb.velocity = (moveDirection * moveSpeed * 60f * Time.fixedDeltaTime);
+            Vector3 vel = (moveDirection * moveSpeed * 60f * Time.fixedDeltaTime);
+            rb.velocity = new Vector3(vel.x, rb.velocity.y, vel.z);
         }
     }
 

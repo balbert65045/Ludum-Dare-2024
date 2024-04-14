@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
+    public float levelAdjustmentTimeFactor = 1f;
     [SerializeField] float timeForLevel = 60f;
     public float GetTimeForLevel() { return timeForLevel; }
     [SerializeField] int scoreForFirstStar = 20;

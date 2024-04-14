@@ -70,6 +70,8 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         animator.speed = speed * .1f;
-        rb.MovePosition(rb.position + moveDirection * speed * Time.fixedDeltaTime);
+        Vector3 vel = moveDirection * speed * 60f * Time.fixedDeltaTime;
+        rb.velocity = new Vector3(vel.x, rb.velocity.y, vel.z);
+        //rb.velocity = moveDirection * speed * 60f * Time.fixedDeltaTime;
     }
 }

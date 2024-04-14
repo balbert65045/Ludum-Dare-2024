@@ -71,5 +71,6 @@ public class SummonRequest : MonoBehaviour
                 images[i].sprite = FindObjectOfType<SummonLibrary>().findSprite(myRequestTypes[i]);
             }
         }
+        SummonTime = SummonTime * FindObjectOfType<LevelManager>().levelAdjustmentTimeFactor;
     }
 }

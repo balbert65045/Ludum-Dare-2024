@@ -67,6 +67,7 @@ public class PickupController : MonoBehaviour
             Vector3 differenceInMousePos = mousPosDown - Input.mousePosition;
             dirToThrow = new Vector3(-differenceInMousePos.x, 0, -differenceInMousePos.y).normalized;
             throwVel = (Mathf.Clamp(differenceInMousePos.magnitude, 0, MaxChargeDistance) / MaxChargeDistance) * MaxThrowVel;
+            Debug.Log(throwVel);
             RenderArc();
             if (Input.GetMouseButtonUp(0)){
                 PreparingToThrow = false;
@@ -103,7 +104,7 @@ public class PickupController : MonoBehaviour
         float x = t * maxDistance;
         float y = x * Mathf.Tan(radianAngle) - ((Physics.gravity.magnitude * x * x) / (2 * throwVel * throwVel * Mathf.Cos(radianAngle) * Mathf.Cos(radianAngle)));
 
-        Vector3 newPos = transform.position + (dirToThrow * x) + new Vector3(0, y, 0);
+        Vector3 newPos = HoldingObjectPosition.transform.position + (dirToThrow * x) + new Vector3(0, y, 0);
         //return new Vector3(x, y);
         return newPos;
     }
