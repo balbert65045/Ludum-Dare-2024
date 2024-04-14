@@ -24,6 +24,19 @@ public class SummonRequestManager : MonoBehaviour
     [SerializeField] GameObject Four;
 
     [SerializeField] Image Arrow;
+
+    public bool paused = false;
+    public void Pause()
+    {
+        paused = true;
+    }
+
+    public void UnPause()
+    {
+        paused = false;
+        timeSinceLastSummon = Time.time + startDelay;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -88,6 +101,7 @@ public class SummonRequestManager : MonoBehaviour
 
     private void Update()
     {
+        if (paused) { return; }
         if (!finished && myCurrentRequest == null && Time.time > timeSinceLastSummon + startDelay) {
             RequestSummons();
         }

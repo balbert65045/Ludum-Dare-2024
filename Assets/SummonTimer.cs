@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,21 @@ public class SummonTimer : MonoBehaviour
     [SerializeField] Slider slider;
 
     float SummonTime;
+
+    bool paused = false;
+
+    public Action OnSummonTriggered;
+
+    public void PauseTimer()
+    {
+        paused = true;
+    }
+
+    public void ResumeTimer()
+    {
+        paused = false;
+        initialSummoningTime = Time.time;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +42,7 @@ public class SummonTimer : MonoBehaviour
 
     public void TriggerSummoning()
     {
+        if (OnSummonTriggered != null) OnSummonTriggered();
         //Trigger score and stuff
         GetComponentInParent<SummonRequestManager>().TriggerSummoning();
     }
@@ -33,6 +50,7 @@ public class SummonTimer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (paused) { return; }
         if (summoning)
         {
             float timeDifference = Time.time - initialSummoningTime;
