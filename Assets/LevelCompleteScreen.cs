@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LevelCompleteScreen : MonoBehaviour
 {
+    [SerializeField] Button NextLevelButton;
     [SerializeField] Sprite StarOn;
     [SerializeField] Sprite StarOff;
     [SerializeField] GameObject LevelCompletePanel;
@@ -42,10 +44,12 @@ public class LevelCompleteScreen : MonoBehaviour
 
         if (score >= firstStarScore)
         {
+            NextLevelButton.interactable = true;
             Star1.sprite = StarOn;
         }
         else
         {
+            NextLevelButton.interactable = false;
             Star1.sprite = StarOff;
         }
 

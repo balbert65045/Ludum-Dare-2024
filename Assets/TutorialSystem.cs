@@ -48,11 +48,11 @@ public class TutorialSystem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             tutorialpieces[currentTutorialIndex].gameObject.SetActive(false);
+            if (pausePoint) { return; }
             currentTutorialIndex++;
             if(currentTutorialIndex >= tutorialpieces.Length) { UnPause(); }
             else
             {
-                if (pausePoint) { return; }
                 tutorialpieces[currentTutorialIndex].gameObject.SetActive(true);
                 CheckEvent(tutorialpieces[currentTutorialIndex].tutorialEvent);
             }
@@ -89,8 +89,10 @@ public class TutorialSystem : MonoBehaviour
     {
         yield return new WaitForSeconds(.3f);
         pausePoint = false;
-        if (tutorialpieces[currentTutorialIndex].tutorialEvent == TutorialEvent.TriggerMultipleSpawn)
+        if (tutorialpieces[currentTutorialIndex + 1].tutorialEvent == TutorialEvent.TriggerMultipleSpawn)
         {
+            tutorialpieces[currentTutorialIndex].gameObject.SetActive(false);
+            currentTutorialIndex++;
             tutorialpieces[currentTutorialIndex].gameObject.SetActive(true);
             CheckEvent(tutorialpieces[currentTutorialIndex].tutorialEvent);
         }

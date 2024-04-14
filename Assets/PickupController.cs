@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
-using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -67,7 +66,6 @@ public class PickupController : MonoBehaviour
             Vector3 differenceInMousePos = mousPosDown - Input.mousePosition;
             dirToThrow = new Vector3(-differenceInMousePos.x, 0, -differenceInMousePos.y).normalized;
             throwVel = (Mathf.Clamp(differenceInMousePos.magnitude, 0, MaxChargeDistance) / MaxChargeDistance) * MaxThrowVel;
-            Debug.Log(throwVel);
             RenderArc();
             if (Input.GetMouseButtonUp(0)){
                 PreparingToThrow = false;
