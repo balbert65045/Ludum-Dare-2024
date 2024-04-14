@@ -16842,21 +16842,22 @@ MonoBehaviour:
   requestManagers:
   - {fileID: 1695662910}
   requestsForTheLevel:
-  - types: 0000000000000000
+  - types: 000000000000000000000000
   - types: 01000000
+  - types: 0300000002000000
+  - types: 010000000100000001000000
+  - types: 02000000
+  - types: 000000000100000001000000
   - types: 03000000
-  - types: 00000000
-  - types: 0200000000000000
-  - types: 03000000
-  - types: 0100000001000000
   - types: 0100000000000000
+  - types: 01000000
+  - types: 000000000200000000000000
+  - types: 01000000
+  - types: 000000000100000003000000
   - types: 03000000
+  - types: 0000000001000000
+  - types: 030000000300000003000000
   - types: 0000000002000000
-  - types: 0200000002000000
-  - types: 0000000001000000
-  - types: 03000000
-  - types: 0000000001000000
-  - types: 0300000003000000
   SpawnLocations:
   - {fileID: 1388881546}
   - {fileID: 802565493}
@@ -16912,9 +16913,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86ae5efbcfb08f141be55090ce472e51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mostersAllowedForRandomCreation: 0000000001000000020000000000000001000000
+  mostersAllowedForRandomCreation: 000000000100000002000000000000000100000003000000
   delayForRandomness: 3
-  frequencyOfRandomSummons: 7
+  frequencyOfRandomSummons: 6.5
 --- !u!1 &1498103364
 GameObject:
   m_ObjectHideFlags: 0
@@ -24965,7 +24966,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelAdjustmentTimeFactor: 1.4
-  timeForLevel: 202
+  timeForLevel: 192
   scoreForFirstStar: 25
   scoreForSecondStar: 50
   scoreForThirdStar: 70
