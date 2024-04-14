@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class SummoningZone : MonoBehaviour
 {
+    public AudioSource SuccessAudio;
+    public AudioSource FailAudio;
+    public AudioSource EnterAudio;
+
+
     public SpriteRenderer circle;
     public List<PickUpableObj> objsInCircle = new List<PickUpableObj>();
     [SerializeField] GameObject[] Spots;
@@ -17,6 +22,7 @@ public class SummoningZone : MonoBehaviour
             if (objsInCircle.Count >= Spots.Length) { return; }
             if (objsInCircle.Contains(other.transform.GetComponent<PickUpableObj>())) { return; }
             objsInCircle.Add(other.transform.GetComponent<PickUpableObj>());
+            EnterAudio.Play();
             if (OnChangedInsidePortal != null) { OnChangedInsidePortal(); }
             other.transform.GetComponent<PickUpableObj>().GetComponent<Rigidbody>().useGravity = false;
             other.transform.GetComponent<PickUpableObj>().GetComponent<Rigidbody>().velocity = Vector3.zero;

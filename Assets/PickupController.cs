@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 
 public class PickupController : MonoBehaviour
 {
+    [SerializeField] AudioSource pickupSound;
+    [SerializeField] AudioSource throwSound;
     [SerializeField] GameObject HoldingObjectPosition;
     bool PreparingToThrow = false;
     float timeOfPreparitionOfThrow;
@@ -39,6 +41,7 @@ public class PickupController : MonoBehaviour
             {
                 if (objsCapableOfPickingUp.Count != 0)
                 {
+                    pickupSound.Play();
                     objectHolding = objsCapableOfPickingUp[0];
                     objectHolding.GetComponent<Rigidbody>().useGravity = false;
                     objectHolding.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
@@ -118,6 +121,8 @@ public class PickupController : MonoBehaviour
 
         if (throwHeldObj)
         {
+            objectHolding.BeingThrown.Play();
+            throwSound.Play();
             lineRenderer.positionCount = 0;
             throwHeldObj = false;
             Rigidbody objectToThrow = objectHolding.GetComponent<Rigidbody>();

@@ -13,6 +13,8 @@ public class TrashTrigger : MonoBehaviour
     {
         if (other.GetComponent<PickUpableObj>() != null && other.GetComponent<PickUpableObj>() != lastObjectThrough)
         {
+            lastObjectThrough = other.GetComponent<PickUpableObj>();
+            GetComponent<AudioSource>().Play();
             FindObjectOfType<Score>().AdjustScore(pointsForTrash);
             StartCoroutine("ShowPoints");
         }

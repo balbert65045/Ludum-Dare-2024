@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] AudioSource MovingAudio;
     [SerializeField] float MoveSpeed = 1f;
     [SerializeField] float DashSpeed = 6f;
     [SerializeField] float DashTime = 1f;
@@ -37,7 +38,6 @@ public class PlayerMovement : MonoBehaviour
             Quaternion toRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, 360 * Time.deltaTime);
             animator.SetBool("IsMoving", true);
-
         }
         else
         {
@@ -67,6 +67,28 @@ public class PlayerMovement : MonoBehaviour
             {
                 isDashing = false;
                 dashCoolingDown = true;
+            }
+        }
+        if (moveDirection == Vector3.zero)
+        {
+            if (MovingAudio.isPlaying)
+            {
+                MovingAudio.Stop();
+            }
+        }
+        else
+        {
+            if (!MovingAudio.isPlaying)
+            {
+                MovingAudio.Play();
+            }
+            if (speed == DashSpeed)
+            {
+                MovingAudio.pitch = 1.3f;
+            }
+            else
+            {
+                MovingAudio.pitch = .7f;
             }
         }
         animator.speed = speed * .1f;

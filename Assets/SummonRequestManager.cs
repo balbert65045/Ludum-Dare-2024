@@ -141,7 +141,7 @@ public class SummonRequestManager : MonoBehaviour
             ValueEarnedText.gameObject.SetActive(true);
             ValueEarnedText.text = "+10";
             ValueEarnedText.color = Color.green;
-
+            LinkedSummoningZone.SuccessAudio.Play();
             FindObjectOfType<Score>().AdjustScore(10);
 
         }
@@ -150,7 +150,7 @@ public class SummonRequestManager : MonoBehaviour
             ValueEarnedText.gameObject.SetActive(true);
             ValueEarnedText.text = "-10";
             ValueEarnedText.color = Color.red;
-
+            LinkedSummoningZone.FailAudio.Play();
             FindObjectOfType<Score>().AdjustScore(-10);
             Debug.Log("Summon Fails");
         }
