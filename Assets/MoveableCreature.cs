@@ -33,7 +33,7 @@ public class MoveableCreature : MonoBehaviour
         StartCoroutine("ConsiderNewDirection");
         rb.constraints = RigidbodyConstraints.None;
         SetCapableOfMoving(false);
-        timeToBeAbleToCheck = Time.time + DelayToMoveFromStart;
+        timeToBeAbleToCheck = Time.timeSinceLevelLoad + DelayToMoveFromStart;
     }
 
     IEnumerator ConsiderNewDirection()
@@ -56,7 +56,7 @@ public class MoveableCreature : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.time < timeToBeAbleToCheck) { return; }
+        if (Time.timeSinceLevelLoad < timeToBeAbleToCheck) { return; }
         if (CapableOfMoving && !pickUpableObj.isPickedUp && pickUpableObj.zoneIn == null)
         {
             if (moveDirection != Vector3.zero)

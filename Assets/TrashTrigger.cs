@@ -15,15 +15,16 @@ public class TrashTrigger : MonoBehaviour
         {
             lastObjectThrough = other.GetComponent<PickUpableObj>();
             GetComponent<AudioSource>().Play();
-            FindObjectOfType<Score>().AdjustScore(pointsForTrash);
-            StartCoroutine("ShowPoints");
+            int value = FindObjectOfType<Score>().multiplierValue * pointsForTrash;
+            FindObjectOfType<Score>().AdjustScore(value);
+            StartCoroutine("ShowPoints", value);
         }
     }
 
-    IEnumerator ShowPoints()
+    IEnumerator ShowPoints(int value)
     {
         pointsText.gameObject.SetActive(true);
-        pointsText.text = "+" + pointsForTrash.ToString();
+        pointsText.text = "+" + value.ToString();
         yield return new WaitForSeconds(1);
         pointsText.gameObject.SetActive(false);
     }

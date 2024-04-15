@@ -24,7 +24,7 @@ public class SummonTimer : MonoBehaviour
     public void ResumeTimer()
     {
         paused = false;
-        initialSummoningTime = Time.time;
+        initialSummoningTime = Time.timeSinceLevelLoad;
     }
     // Start is called before the first frame update
     void Start()
@@ -37,7 +37,7 @@ public class SummonTimer : MonoBehaviour
     public void StartSummoning()
     {
         summoning = true;
-        initialSummoningTime = Time.time;
+        initialSummoningTime = Time.timeSinceLevelLoad;
     }
 
     public void TriggerSummoning()
@@ -53,7 +53,7 @@ public class SummonTimer : MonoBehaviour
         if (paused) { return; }
         if (summoning)
         {
-            float timeDifference = Time.time - initialSummoningTime;
+            float timeDifference = Time.timeSinceLevelLoad - initialSummoningTime;
             float percentage = Mathf.Clamp(timeDifference, 0.0f, SummonTime)/ SummonTime;
             slider.value = percentage;
             if (percentage >= 1)

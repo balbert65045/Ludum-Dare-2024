@@ -60,7 +60,7 @@ public class PickupController : MonoBehaviour
             {
                 mousPosDown = Input.mousePosition;
                 PreparingToThrow = true;
-                timeOfPreparitionOfThrow = Time.time;
+                timeOfPreparitionOfThrow = Time.timeSinceLevelLoad;
             }
         }
 
@@ -123,6 +123,7 @@ public class PickupController : MonoBehaviour
         {
             objectHolding.BeingThrown.Play();
             throwSound.Play();
+            objectHolding.GetComponentInChildren<lineFollow>().Throw();
             lineRenderer.positionCount = 0;
             throwHeldObj = false;
             Rigidbody objectToThrow = objectHolding.GetComponent<Rigidbody>();

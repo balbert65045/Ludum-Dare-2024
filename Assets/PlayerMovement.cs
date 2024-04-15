@@ -47,10 +47,10 @@ public class PlayerMovement : MonoBehaviour
         {
             dashAvailable = false;
             isDashing = true;
-            timeOfDash = Time.time;
+            timeOfDash = Time.timeSinceLevelLoad;
         }
 
-        if(dashCoolingDown && Time.time > timeOfDash + DashTime + DashCooldown)
+        if(dashCoolingDown && Time.timeSinceLevelLoad > timeOfDash + DashTime + DashCooldown)
         {
             dashCoolingDown = false;
             dashAvailable = true;
@@ -63,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
         if (isDashing)
         {
             speed = DashSpeed;
-            if (Time.time > timeOfDash + DashTime)
+            if (Time.timeSinceLevelLoad > timeOfDash + DashTime)
             {
                 isDashing = false;
                 dashCoolingDown = true;

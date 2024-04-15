@@ -21,7 +21,7 @@ public class RandomSummonCreations : MonoBehaviour
     public void UnPause()
     {
         paused = false;
-        timeSinceLastRandomSummon = Time.time + delayForRandomness;
+        timeSinceLastRandomSummon = Time.timeSinceLevelLoad + delayForRandomness;
     }
 
         // Start is called before the first frame update
@@ -35,9 +35,9 @@ public class RandomSummonCreations : MonoBehaviour
     void Update()
     {
         if (paused) { return; }
-        if (Time.time > timeSinceLastRandomSummon + frequencyOfRandomSummons)
+        if (Time.timeSinceLevelLoad > timeSinceLastRandomSummon + frequencyOfRandomSummons)
         {
-            timeSinceLastRandomSummon = Time.time;
+            timeSinceLastRandomSummon = Time.timeSinceLevelLoad;
             SummonRandomCreature();
         }
     }

@@ -9,12 +9,16 @@ public class SummoningZone : MonoBehaviour
     public AudioSource FailAudio;
     public AudioSource EnterAudio;
 
+    [SerializeField] ParticleSystem particles;
+    [SerializeField] Light myLight;
 
     public SpriteRenderer circle;
     public List<PickUpableObj> objsInCircle = new List<PickUpableObj>();
     [SerializeField] GameObject[] Spots;
 
     public Action OnChangedInsidePortal;
+    public Action OnSummonFinished;
+
     private void OnTriggerStay(Collider other)
     {
         if (other.transform.GetComponent<PickUpableObj>() != null && !other.transform.GetComponent<PickUpableObj>().isPickedUp && other.transform.GetComponent<PickUpableObj>().zoneIn == null)
@@ -41,14 +45,36 @@ public class SummoningZone : MonoBehaviour
 
     public void SummonObjs()
     {
+        StartCoroutine("TriggerTheSummoning");
+    }
+
+    
+    IEnumerator TriggerTheSummoning()
+    {
+        while( myLight.intensity < 20)
+        {
+            myLight.intensity += 20 * Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        myLight.intensity = 0;
+        particles.Play();
+        GetRidOfTheObjects();
+    }
+
+    void GetRidOfTheObjects()
+    {
+        if (OnSummonFinished != null) { OnSummonFinished(); }
         PickUpableObj[] Objs = objsInCircle.ToArray();
         FindObjectOfType<PickupController>().RemoveFromCapablePickups(Objs);
-        foreach(PickUpableObj Obj in Objs) { 
-            RemoveObj(Obj);
+        foreach (PickUpableObj Obj in Objs)
+        {
+           // RemoveObj(Obj);
             Destroy(Obj.gameObject);
         }
+        objsInCircle.Clear();
         if (OnChangedInsidePortal != null) { OnChangedInsidePortal(); }
     }
+    
 
     private void FixedUpdate()
     {

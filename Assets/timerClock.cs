@@ -19,7 +19,7 @@ public class timerClock : MonoBehaviour
     public void UnPause()
     {
         paused = false;
-        initalStartTime = Time.time + FindObjectOfType<LevelManager>().GetTimeForLevel();
+        initalStartTime = Time.timeSinceLevelLoad + FindObjectOfType<LevelManager>().GetTimeForLevel();
     }
 
     string ConvertTimeToString(float time)
@@ -39,7 +39,7 @@ public class timerClock : MonoBehaviour
     void Update()
     {
         if(paused) { return; }
-        currentTime = Mathf.Clamp(initalStartTime - Time.time, 0, 1000000);
+        currentTime = Mathf.Clamp(initalStartTime - Time.timeSinceLevelLoad, 0, 1000000);
         timerText.text = ConvertTimeToString(currentTime);
         if (currentTime == 0)
         {

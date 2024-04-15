@@ -65,7 +65,7 @@ public class TutorialSystem : MonoBehaviour
         {
             summonManagers[0].RequestSummons();
             FindObjectOfType<SummonTimer>().PauseTimer();
-            FindObjectOfType<SummonTimer>().OnSummonTriggered += SummonTimerFinished;
+            FindObjectOfType<SummoningZone>().OnSummonFinished += SummonTimerFinished;
         }
         else if (tutorialEvent == TutorialEvent.ResumeSummonTimer)
         {
@@ -82,6 +82,7 @@ public class TutorialSystem : MonoBehaviour
 
     void SummonTimerFinished()
     {
+        FindObjectOfType<SummoningZone>().OnSummonFinished -= SummonTimerFinished;
         StartCoroutine("WaitAndThenFinish");
     }
 

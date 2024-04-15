@@ -34,17 +34,18 @@ public class SummonRequestManager : MonoBehaviour
     public void UnPause()
     {
         paused = false;
-        timeSinceLastSummon = Time.time + startDelay;
+        timeSinceLastSummon = Time.timeSinceLevelLoad + startDelay;
     }
 
     // Start is called before the first frame update
     void Start()
     {
         Arrow.gameObject.SetActive(false);
-        timeSinceLastSummon = Time.time;
+        timeSinceLastSummon = Time.timeSinceLevelLoad;
         Icon.sprite = LinkedSummoningZone.circle.sprite;
         Icon.color = LinkedSummoningZone.circle.color;
-        LinkedSummoningZone.OnChangedInsidePortal = SumminingZone_OnChangedInsidePortal;
+        LinkedSummoningZone.OnChangedInsidePortal += SumminingZone_OnChangedInsidePortal;
+        LinkedSummoningZone.OnSummonFinished += OnSummonFinished;
     }
 
     void SumminingZone_OnChangedInsidePortal()
@@ -102,7 +103,7 @@ public class SummonRequestManager : MonoBehaviour
     private void Update()
     {
         if (paused) { return; }
-        if (!finished && myCurrentRequest == null && Time.time > timeSinceLastSummon + startDelay) {
+        if (!finished && myCurrentRequest == null && Time.timeSinceLevelLoad > timeSinceLastSummon + startDelay) {
             RequestSummons();
         }
     }
@@ -134,16 +135,23 @@ public class SummonRequestManager : MonoBehaviour
 
     public void TriggerSummoning()
     {
-        timeSinceLastSummon = Time.time;
+        timeSinceLastSummon = Time.timeSinceLevelLoad;
+        LinkedSummoningZone.SummonObjs();
+    }
+
+    public void OnSummonFinished()
+    {
+        //timeSinceLastSummon = Time.timeSinceLevelLoad;
         if (CheckIfRequestWorks(myCurrentRequest.myRequestTypes, LinkedSummoningZone.objsInCircle))
         {
             Debug.Log("Summon Works!");
             ValueEarnedText.gameObject.SetActive(true);
-            ValueEarnedText.text = "+10";
+            int score = 10 * FindObjectOfType<Score>().multiplierValue;
+            ValueEarnedText.text = "+" + score.ToString();
             ValueEarnedText.color = Color.green;
             LinkedSummoningZone.SuccessAudio.Play();
-            FindObjectOfType<Score>().AdjustScore(10);
-
+            FindObjectOfType<Score>().AdjustScore(score);
+            FindObjectOfType<Score>().ChangeMultiplier(true);
         }
         else
         {
@@ -152,9 +160,9 @@ public class SummonRequestManager : MonoBehaviour
             ValueEarnedText.color = Color.red;
             LinkedSummoningZone.FailAudio.Play();
             FindObjectOfType<Score>().AdjustScore(-10);
+            FindObjectOfType<Score>().ChangeMultiplier(false);
             Debug.Log("Summon Fails");
         }
-        LinkedSummoningZone.SummonObjs();
         Destroy(myCurrentRequest.gameObject);
         Arrow.gameObject.SetActive(false);
         StartCoroutine("WaitThenHideText");
